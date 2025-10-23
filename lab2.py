@@ -2,8 +2,6 @@
 Sistema de Análisis de Rutas Aéreas
 Laboratorio 2 - Estructura de Datos II
 Universidad del Norte
-
-Fecha: Octubre 2025
 """
 
 import csv
@@ -367,7 +365,7 @@ class GrafoAereo:
     def dibujar_camino_en_mapa(self, camino: List[str], 
                                ruta_salida: str = "mapa_camino.html"):
         """
-        Dibuja un camino específico en el mapa.
+        Dibuja un camino específico en el mapa con las distancias entre aeropuertos.
         
         Args:
             camino: Lista de códigos de aeropuertos que forman el camino
@@ -391,13 +389,49 @@ class GrafoAereo:
         # Crear el mapa
         mapa = folium.Map(location=[lat_promedio, lon_promedio], zoom_start=4)
         
-        # Dibujar la línea del camino
-        folium.PolyLine(
-            coordenadas,
-            color='red',
-            weight=3,
-            opacity=0.8
-        ).add_to(mapa)
+        # Dibujar cada segmento del camino con su distancia
+        for i in range(len(camino) - 1):
+            codigo_origen = camino[i]
+            codigo_destino = camino[i + 1]
+            
+            aeropuerto_origen = self.aeropuertos[codigo_origen]
+            aeropuerto_destino = self.aeropuertos[codigo_destino]
+            
+            # Obtener la distancia entre estos dos aeropuertos
+            distancia = None
+            for vecino, peso in self.adyacencias[codigo_origen]:
+                if vecino == codigo_destino:
+                    distancia = peso
+                    break
+            
+            # Coordenadas del segmento
+            segmento_coords = [
+                [aeropuerto_origen.latitud, aeropuerto_origen.longitud],
+                [aeropuerto_destino.latitud, aeropuerto_destino.longitud]
+            ]
+            
+            # Dibujar la línea del segmento
+            folium.PolyLine(
+                segmento_coords,
+                color='red',
+                weight=3,
+                opacity=0.8,
+                popup=f"{codigo_origen} → {codigo_destino}<br>Distancia: {distancia:.2f} km"
+            ).add_to(mapa)
+            
+            # Agregar un marcador en el punto medio con la distancia
+            lat_media = (aeropuerto_origen.latitud + aeropuerto_destino.latitud) / 2
+            lon_media = (aeropuerto_origen.longitud + aeropuerto_destino.longitud) / 2
+            
+            folium.Marker(
+                location=[lat_media, lon_media],
+                icon=folium.DivIcon(html=f'''
+                    <div style="
+                        font-weight: bold;
+                        font-size: 50px;
+                    ">{distancia:.2f} km</div>
+                ''')
+            ).add_to(mapa)
         
         # Agregar marcadores para los aeropuertos en el camino
         for i, codigo in enumerate(camino):
@@ -549,5 +583,4 @@ def menu_principal():
             print("\n✗ Opción inválida. Por favor intente de nuevo.")
 
 if __name__ == "__main__":
-
     menu_principal()
