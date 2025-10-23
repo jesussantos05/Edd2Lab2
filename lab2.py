@@ -3,7 +3,6 @@ Sistema de Análisis de Rutas Aéreas
 Laboratorio 2 - Estructura de Datos II
 Universidad del Norte
 
-Autores: [Nombres de los integrantes del equipo]
 Fecha: Octubre 2025
 """
 
@@ -550,4 +549,5 @@ def menu_principal():
             print("\n✗ Opción inválida. Por favor intente de nuevo.")
 
 if __name__ == "__main__":
+
     menu_principal()
