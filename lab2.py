@@ -464,14 +464,14 @@ def menu_principal():
     
     try:
         grafo.cargar_desde_csv('flights_final.csv')
-        print(f"✓ Datos cargados exitosamente")
+        print(f" Datos cargados exitosamente")
         print(f"  - Total de aeropuertos: {len(grafo.aeropuertos)}")
         print(f"  - Total de rutas: {sum(len(adj) for adj in grafo.adyacencias.values()) // 2}")
     except FileNotFoundError:
-        print("✗ Error: No se encontró el archivo flights_final.csv")
+        print(" Error: No se encontró el archivo flights_final.csv")
         return
     except Exception as e:
-        print(f"✗ Error al cargar datos: {e}")
+        print(f" Error al cargar datos: {e}")
         return
     
     # Generar mapa inicial
@@ -500,7 +500,7 @@ def menu_principal():
             if es_conexo:
                 print("✓ El grafo ES CONEXO")
             else:
-                print(f"✗ El grafo NO es conexo")
+                print(f" El grafo NO es conexo")
                 print(f"  Número de componentes: {num_componentes}")
                 for i, componente in enumerate(componentes, 1):
                     print(f"  Componente {i}: {len(componente)} aeropuertos")
@@ -511,7 +511,7 @@ def menu_principal():
             
             if es_conexo:
                 peso = grafo.arbol_expansion_minima_prim()
-                print(f"✓ Peso del árbol de expansión mínima: {peso:.2f} km")
+                print(f"Peso del árbol de expansión mínima: {peso:.2f} km")
             else:
                 print(f"El grafo tiene {num_componentes} componentes.")
                 print("Calculando MST para cada componente:\n")
@@ -523,11 +523,11 @@ def menu_principal():
             codigo = input("\nIngrese el código del aeropuerto: ").strip().upper()
             
             if codigo not in grafo.aeropuertos:
-                print(f"✗ Error: El aeropuerto '{codigo}' no existe en el sistema")
+                print(f" Error: El aeropuerto '{codigo}' no existe en el sistema")
             else:
                 primer_vertice = codigo
                 aeropuerto = grafo.aeropuertos[codigo]
-                print(f"\n✓ Primer vértice seleccionado:\n")
+                print(f"\n Primer vértice seleccionado:\n")
                 print(aeropuerto)
                 
                 # Mostrar los 10 aeropuertos más lejanos
@@ -544,22 +544,22 @@ def menu_principal():
         
         elif opcion == '4':
             if primer_vertice is None:
-                print("\n✗ Error: Primero debe seleccionar un primer vértice (opción 3)")
+                print("\n Error: Primero debe seleccionar un primer vértice (opción 3)")
             else:
                 codigo = input("\nIngrese el código del segundo aeropuerto: ").strip().upper()
                 
                 if codigo not in grafo.aeropuertos:
-                    print(f"✗ Error: El aeropuerto '{codigo}' no existe en el sistema")
+                    print(f" Error: El aeropuerto '{codigo}' no existe en el sistema")
                 else:
                     # Calcular camino mínimo
                     distancias, predecesores = grafo.dijkstra(primer_vertice)
                     
                     if distancias[codigo] == float('infinity'):
-                        print(f"\n✗ No existe un camino entre {primer_vertice} y {codigo}")
+                        print(f"\n No existe un camino entre {primer_vertice} y {codigo}")
                     else:
                         camino = grafo.reconstruir_camino(predecesores, codigo)
                         
-                        print(f"\n✓ Camino mínimo de {primer_vertice} a {codigo}:")
+                        print(f"\n Camino mínimo de {primer_vertice} a {codigo}:")
                         print(f"  Distancia total: {distancias[codigo]:.2f} km")
                         print(f"  Número de escalas: {len(camino) - 2}")
                         print(f"\nRuta detallada:")
@@ -576,11 +576,12 @@ def menu_principal():
                         grafo.dibujar_camino_en_mapa(camino)
         
         elif opcion == '5':
-            print("\n¡Hasta luego!")
+            print("\nchaitoo <3")
             break
         
         else:
             print("\n✗ Opción inválida. Por favor intente de nuevo.")
 
 if __name__ == "__main__":
+
     menu_principal()
